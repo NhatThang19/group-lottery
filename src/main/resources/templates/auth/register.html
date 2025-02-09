@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/auth-layout}">
+
+<head>
+    <title>Đăng ký</title>
+</head>
+
+<body>
+    <th:block layout:fragment="content">
+        <h2 class="text-center mb-4">Đăng ký</h2>
+        <form th:action="@{/auth/register}" th:object="${registerReq}" method="post">
+            <div class="mb-3">
+                <label class="form-label">Tên đăng nhập</label>
+                <input type="text" th:field="*{username}" class="form-control" placeholder="Nhập tên đăng nhập"
+                    th:classappend="${#fields.hasErrors('username')}? 'is-invalid' : ''" autocomplete="off" />
+                <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Mật khẩu</label>
+                <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu"
+                    th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''" autocomplete="off" />
+                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nhập lại mật khẩu</label>
+                <input class="form-control" type="password" th:field="*{confirmPassword}"
+                    placeholder="Nhập lại mật khẩu"
+                    th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid' : (${#fields.hasErrors('passwordMatching')} ? 'is-invalid' : '')"
+                    autocomplete="off" />
+                <div th:if="${#fields.hasErrors('confirmPassword')}" th:errors="*{confirmPassword}"
+                    class="invalid-feedback"></div>
+                <div th:if="${!#fields.hasErrors('confirmPassword') and #fields.hasErrors('passwordMatching')}"
+                    th:errors="*{passwordMatching}" class="invalid-feedback"></div>
+            </div>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary w-100">Đăng ký</button>
+            </div>
+        </form>
+        <p class="text-center mt-3">
+            Đã có tài khoản? <a href="/auth/login">Đăng nhập</a>
+        </p>
+    </th:block>
+</body>
+
+</html>
