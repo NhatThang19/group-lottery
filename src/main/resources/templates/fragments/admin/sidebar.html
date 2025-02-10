@@ -1,0 +1,46 @@
+<div class="sidebar" data-background-color="dark" th:fragment="sidebar">
+    <div class="sidebar-logo">
+        <!-- Logo Header -->
+        <div class="logo-header" data-background-color="dark">
+            <a href="/admin" class="logo">
+                <h5 class="text-white">GroupLottery</h5>
+            </a>
+            <div class="nav-toggle">
+                <button class="btn btn-toggle toggle-sidebar">
+                    <i class="gg-menu-right"></i>
+                </button>
+                <button class="btn btn-toggle sidenav-toggler">
+                    <i class="gg-menu-left"></i>
+                </button>
+            </div>
+            <button class="topbar-toggler more">
+                <i class="gg-more-vertical-alt"></i>
+            </button>
+        </div>
+        <!-- End Logo Header -->
+    </div>
+    <div class="sidebar-wrapper scrollbar scrollbar-inner">
+        <div class="sidebar-content">
+            <ul class="nav nav-secondary">
+                <li class="nav-item" th:classappend="${path == 'DASHBOARD'} ? 'active' :''">
+                    <a href="/admin">
+                        <i class="fas fa-home"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Quản lý</h4>
+                </li>
+                <li class="nav-item" th:classappend="${path == 'USER'} ? 'active' :''">
+                    <a href="/admin/user">
+                        <i class="fas fas fa-user"></i>
+                        <p>Người dùng</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

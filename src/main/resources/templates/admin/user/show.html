@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/admin/admin-layout}">
+
+<head>
+    <title>Người dùng</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+            <div>
+                <h3 class="fw-bold mb-3">Người dùng</h3>
+            </div>
+            <!-- Breadcrumb -->
+            <ul class="breadcrumbs mb-3">
+                <li class="nav-home">
+                    <a href="/admin">
+                        <i class="icon-home"></i>
+                    </a>
+                </li>
+                <li class="separator">
+                    <i class="icon-arrow-right"></i>
+                </li>
+                <li class="nav-item">
+                    <a href="/admin/user">Người dùng</a>
+                </li>
+            </ul>
+            <div class="ms-md-auto py-2 py-md-0">
+                <a href="#" class="btn btn-primary btn-round">Tạo người dùng</a>
+            </div>
+        </div>
+        <!-- Content -->
+        <div class="row">
+
+        </div>
+    </div>
+</body>
+
+</html>

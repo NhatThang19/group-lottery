@@ -2,6 +2,7 @@ package vn.project.group_lottery.dto;
 
 import vn.project.group_lottery.dto.Request.RegisterInfoReq;
 import vn.project.group_lottery.dto.Request.RegisterReq;
+import vn.project.group_lottery.dto.Response.UserSessionRes;
 import vn.project.group_lottery.enums.Gender;
 import vn.project.group_lottery.model.User;
 
@@ -17,5 +18,14 @@ public class Converter {
         user.setPhone(registerInfoReq.getPhone());
 
         return user;
+    }
+
+    public static UserSessionRes userConvertTSessionRes(User user, UserSessionRes userSessionRes) {
+        userSessionRes.setId(user.getId());
+        userSessionRes.setUsername(user.getUsername());
+        userSessionRes.setAvatar(user.getAvatar());
+        userSessionRes.setBalance(user.getWallet().getBalance());
+
+        return userSessionRes;
     }
 }

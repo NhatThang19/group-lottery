@@ -1,5 +1,7 @@
 package vn.project.group_lottery.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import vn.project.group_lottery.dto.Request.RegisterInfoReq;
 import vn.project.group_lottery.dto.Request.RegisterReq;
@@ -18,6 +21,9 @@ import vn.project.group_lottery.service.UserService;
 @Controller
 @RequestMapping("/auth")
 public class AuthController {
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
     private final UserService userService;
     private final AuthService authService;
 
@@ -34,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public String postRegister(@ModelAttribute("registerReq") @Valid RegisterReq registerReq,
+    public String postRegister(@ModelAttribute @Valid RegisterReq registerReq,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes) {
         if (this.userService.isUsernameExists(registerReq.getUsername())) {
@@ -51,7 +57,7 @@ public class AuthController {
     }
 
     @GetMapping("/register/info")
-    public String getRegisterInfo(@ModelAttribute("registerReq") RegisterReq registerReq,
+    public String getRegisterInfo(@ModelAttribute RegisterReq registerReq,
             Model model) {
         model.addAttribute("registerReq", registerReq);
         model.addAttribute("registerInfoReq", new RegisterInfoReq());
@@ -60,8 +66,8 @@ public class AuthController {
     }
 
     @PostMapping("/register/info")
-    public String postRegisterInfo(@ModelAttribute("registerReq") RegisterReq registerReq,
-            @ModelAttribute("registerInfoReq") @Valid RegisterInfoReq registerInfoReq,
+    public String postRegisterInfo(@ModelAttribute RegisterReq registerReq,
+            @ModelAttribute @Valid RegisterInfoReq registerInfoReq,
             BindingResult bindingResult, RedirectAttributes redirectAttributes) {
         if (this.userService.isEmailExists(registerInfoReq.getEmail())) {
             bindingResult.rejectValue("email", "", "Email đã tồn tại");
@@ -77,18 +83,26 @@ public class AuthController {
 
         this.authService.registerUser(registerReq, registerInfoReq);
 
-        redirectAttributes.addFlashAttribute("susses", "Đăng ký thành công!");
+        redirectAttributes.addFlashAttribute("regSuccessMessage", "Đăng ký thành công!");
 
-        return "redirect:auth/login";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/login")
-    public String getLogin() {
-        return "";
-    }
+    public String getLogin(HttpSession session, Model model) {
+        String loginErrorMessage = (String) session.getAttribute("loginErrorMessage");
+        String logoutSuccessMessage = (String) session.getAttribute("logoutSuccessMessage");
 
-    @PostMapping
-    public String postLogin() {
-        return "";
+        if (loginErrorMessage != null) {
+            model.addAttribute("loginErrorMessage", loginErrorMessage);
+            session.removeAttribute("loginErrorMessage");
+        }
+
+        if (logoutSuccessMessage != null) {
+            model.addAttribute("logoutSuccessMessage", logoutSuccessMessage);
+            session.removeAttribute("logoutSuccessMessage");
+        }
+
+        return "auth/login";
     }
 }
