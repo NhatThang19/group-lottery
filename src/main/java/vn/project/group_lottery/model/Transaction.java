@@ -31,7 +31,7 @@ public class Transaction {
     private TransactionType transactionType;
 
     @CreatedDate
-    private LocalDateTime createAt;
+    private LocalDateTime CreatedDate;
 
     @Enumerated(EnumType.STRING)
     private TransactionStatus status;

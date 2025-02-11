@@ -1,5 +1,7 @@
 package vn.project.group_lottery.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
@@ -9,6 +11,8 @@ import vn.project.group_lottery.model.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {
     User save(User user);
+
+    List<User> findAll();
 
     User findUserByUsername(String username);
 

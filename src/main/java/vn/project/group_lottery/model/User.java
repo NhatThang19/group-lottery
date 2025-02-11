@@ -4,11 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import vn.project.group_lottery.enums.Gender;
 import vn.project.group_lottery.enums.UserStatus;
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -63,8 +61,6 @@ public class User extends Auditable {
 
     @ManyToOne()
     @JoinColumn(name = "role_id")
-    @ToString.Exclude
-    @JsonBackReference
     @NotNull(message = "Vai trò không được để trống")
     private Role role;
 

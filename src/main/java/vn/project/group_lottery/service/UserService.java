@@ -1,8 +1,14 @@
 package vn.project.group_lottery.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
+import vn.project.group_lottery.dto.Converter;
+import vn.project.group_lottery.dto.Response.UserRes;
 import vn.project.group_lottery.model.User;
 import vn.project.group_lottery.repository.UserRepository;
 
@@ -16,11 +22,13 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     public User createUser(User user) {
         encodedPassword(user);
         return this.userRepository.save(user);
     }
 
+    @Transactional
     public User updateUser(User user) {
         return this.userRepository.save(user);
     }
@@ -45,5 +53,13 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return this.userRepository.findUserByUsername(username);
+    }
+
+    public List<UserRes> getAllUser() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> Converter.userConvertToUserRes(user, new UserRes()))
+                .collect(Collectors.toList());
     }
 }

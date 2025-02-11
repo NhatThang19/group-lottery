@@ -26,13 +26,53 @@
                     <a href="/admin/user">Người dùng</a>
                 </li>
             </ul>
-            <div class="ms-md-auto py-2 py-md-0">
-                <a href="#" class="btn btn-primary btn-round">Tạo người dùng</a>
-            </div>
         </div>
         <!-- Content -->
         <div class="row">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
+                        <div>
+                            <h4 class="fw-bold mb-3">Quản lý người dùng</h4>
+                        </div>
+                        <div class="ms-md-auto py-2 py-md-0">
+                            <a href="#" class="btn btn-primary btn-round">Thêm người dùng</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Trạng thái</th>
+                                <th scope="col">Thời gian sửa cuối</th>
+                                <th scope="col">Lần sửa cuối bởi</th>
+                                <th scope="col">Số dư</th>
+                                <th scope="col">Hành động</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="user : ${users}">
+                                <td th:text="${user.id}"></td>
+                                <td th:text="${user.username}"></td>
+                                <td th:text="${user.status}"></td>
+                                <td th:text="${user.lastModifiedDate}"></td>
+                                <td th:text="${user.lastModifiedBy}"></td>
+                                <td th:text="${user.balance}"></td>
+                                <td>
+                                    <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                                        class="btn btn-warning btn-sm">Sửa</a>
+                                    <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
+                </div>
+            </div>
         </div>
     </div>
 </body>

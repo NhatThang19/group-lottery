@@ -14,7 +14,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import vn.project.group_lottery.enums.TicketStatus;
 
 @Entity
@@ -33,12 +32,10 @@ public class Ticket {
 
     @ManyToOne()
     @JoinColumn(name = "user_id")
-    @ToString.Exclude
     private User user;
 
     @ManyToOne()
     @JoinColumn(name = "draw_id")
-    @ToString.Exclude
     private Draw draw;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
