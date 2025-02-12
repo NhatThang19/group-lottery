@@ -2,8 +2,7 @@ package vn.project.group_lottery.dto;
 
 import vn.project.group_lottery.dto.Request.RegisterInfoReq;
 import vn.project.group_lottery.dto.Request.RegisterReq;
-import vn.project.group_lottery.dto.Response.UserRes;
-import vn.project.group_lottery.dto.Response.UserSessionRes;
+import vn.project.group_lottery.dto.Request.UserDTOSession;
 import vn.project.group_lottery.enums.Gender;
 import vn.project.group_lottery.model.User;
 
@@ -21,20 +20,20 @@ public class Converter {
         return user;
     }
 
-    public static UserSessionRes userConvertTSessionRes(User user, UserSessionRes userSessionRes) {
-        userSessionRes.setId(user.getId());
-        userSessionRes.setUsername(user.getUsername());
-        userSessionRes.setAvatar(user.getAvatar());
-        userSessionRes.setBalance(user.getWallet().getBalance());
+    public static UserDTOSession userConvertToUserSession(User user, UserDTOSession userDTOSession) {
+        userDTOSession.setId(user.getId());
+        userDTOSession.setUsername(user.getUsername());
+        userDTOSession.setAvatar(user.getAvatar());
+        userDTOSession.setBalance(user.getWallet().getBalance());
 
-        return userSessionRes;
+        return userDTOSession;
     }
 
-    public static UserRes userConvertToUserDetailRes(User user, UserRes userRes) {
-        return userRes;
+    public static UserDTO userConvertToUserDTODetail(User user, UserDTO userDTO) {
+        return userDTO;
     }
 
-    public static UserRes userConvertToUserRes(User user, UserRes userRes) {
+    public static UserDTO userConvertToUserDTO(User user, UserDTO userRes) {
         userRes.setId(user.getId());
         userRes.setUsername(user.getUsername());
         userRes.setEmail(user.getEmail());

@@ -2,13 +2,12 @@ package vn.project.group_lottery.controller;
 
 import java.util.List;
 
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import vn.project.group_lottery.dto.Response.UserRes;
+import vn.project.group_lottery.dto.UserDTO;
 import vn.project.group_lottery.service.UserService;
 
 @Controller
@@ -27,8 +26,8 @@ public class UserController {
     public String getUserPage(Model model) {
         model.addAttribute("path", PATH);
 
-        List<UserRes> userResponses = this.userService.getAllUser();
-        model.addAttribute("users", userResponses);
+        List<UserDTO> userDTOs = this.userService.getAllUser();
+        model.addAttribute("users", userDTOs);
 
         return "admin/user/show";
     }
@@ -36,6 +35,7 @@ public class UserController {
     @GetMapping("/create")
     public String getCreateUser(Model model) {
         model.addAttribute("path", PATH);
+
         return "admin/user/create";
     }
 

@@ -30,6 +30,8 @@
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.min.css}" />
     <link rel="stylesheet" th:href="@{/admin/assets/css/plugins.min.css}" />
     <link rel="stylesheet" th:href="@{/admin/assets/css/kaiadmin.min.css}" />
+
+    <th:block layout:fragment="extra-css"></th:block>
 </head>
 
 <body>
@@ -60,10 +62,16 @@
     <!-- Plugins -->
     <script th:src="@{/admin/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js}"></script>
     <script th:src="@{/admin/assets/js/plugin/chart.js/chart.min.js}"></script>
-    <script th:src="@{/admin/assets/js/plugin/sweetalert/sweetalert.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <!-- Kaiadmin JS -->
     <script th:src="@{/admin/assets/js/kaiadmin.min.js}"></script>
+
+    <!-- My js -->
+    <script th:src="@{/common/js/util.js}"></script>
+    <script th:src="@{/common/js/main.js}"></script>
+
+    <th:block layout:fragment="extra-js"></th:block>
 </body>
 
 </html>

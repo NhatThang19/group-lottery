@@ -231,12 +231,12 @@
                 <li class="nav-item topbar-user dropdown hidden-caret">
                     <a class="dropdown-toggle profile-pic" data-bs-toggle="dropdown" href="#" aria-expanded="false">
                         <div class="avatar-sm">
-                            <img th:src="@{'/common/avatar/' + ${session.userSessionRes.avatar}}" alt="image profile"
+                            <img th:src="@{'/common/avatar/' + ${session.userDTOSession.avatar}}" alt="image profile"
                                 class="avatar-img rounded-circle" />
                         </div>
                         <span class="profile-username">
                             <span class="op-7">Xin chào, </span>
-                            <span class="fw-bold" th:text="${session.userSessionRes.username}"></span>
+                            <span class="fw-bold" th:text="${session.userDTOSession.username}"></span>
                         </span>
                     </a>
                     <ul class="dropdown-menu dropdown-user animated fadeIn">
@@ -244,11 +244,11 @@
                             <li>
                                 <div class="user-box">
                                     <div class="avatar-lg">
-                                        <img th:src="@{'/common/avatar/' + ${session.userSessionRes.avatar}}"
+                                        <img th:src="@{'/common/avatar/' + ${session.userDTOSession.avatar}}"
                                             alt="image profile" class="avatar-img rounded" />
                                     </div>
                                     <div class="u-text">
-                                        <h4 th:text="${session.userSessionRes.username}"></h4>
+                                        <h4 th:text="${session.userDTOSession.username}"></h4>
                                         <p class="text-muted"></p>
                                         <a href="#" class="btn btn-xs btn-secondary btn-sm">Trang cá nhân</a>
                                     </div>
@@ -259,7 +259,7 @@
                                 <a class="dropdown-item" href="/">Trang chủ</a>
                                 <a class="dropdown-item" href="#">Giao dịch</a>
                                 <div class="dropdown-divider"></div>
-                                <form th:action="@{auth/logout}" method="post" class="d-inline">
+                                <form th:action="@{/auth/logout}" method="post" class="d-inline">
                                     <a class="text-reset dropdown-item" href="javascript:void(0)"
                                         onclick="this.closest('form').submit();">
                                         <i class="fas fa-sign-out-alt"></i> Đăng xuất

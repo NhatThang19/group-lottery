@@ -47,8 +47,8 @@
                                 <th scope="col">#</th>
                                 <th scope="col">Tên</th>
                                 <th scope="col">Trạng thái</th>
-                                <th scope="col">Thời gian sửa cuối</th>
                                 <th scope="col">Lần sửa cuối bởi</th>
+                                <th scope="col">Thời gian sửa cuối</th>
                                 <th scope="col">Số dư</th>
                                 <th scope="col">Hành động</th>
                             </tr>
@@ -58,19 +58,19 @@
                                 <td th:text="${user.id}"></td>
                                 <td th:text="${user.username}"></td>
                                 <td th:text="${user.status}"></td>
-                                <td th:text="${user.lastModifiedDate}"></td>
                                 <td th:text="${user.lastModifiedBy}"></td>
-                                <td th:text="${user.balance}"></td>
+                                <td th:attr="data-time=${user.lastModifiedDate}"></td>
+                                <td th:attr="data-balance=${user.balance}"></td>
                                 <td>
+                                    <a th:href="@{/users/detail/{id}(id=${user.id})}"
+                                        class="btn btn-info btn-sm">Xem</a>
                                     <a th:href="@{/users/edit/{id}(id=${user.id})}"
                                         class="btn btn-warning btn-sm">Sửa</a>
-                                    <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-danger btn-sm"
-                                        onclick="return confirm('Bạn có chắc muốn xóa?')">Xóa</a>
+                                    <a href="#" class="btn btn-danger btn-sm delete-btn" th:data-id="${user.id}">Xóa</a>
                                 </td>
                             </tr>
                         </tbody>
                     </table>
-
                 </div>
             </div>
         </div>

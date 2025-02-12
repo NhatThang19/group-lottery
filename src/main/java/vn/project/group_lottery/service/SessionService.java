@@ -4,14 +4,14 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import vn.project.group_lottery.dto.Converter;
-import vn.project.group_lottery.dto.Response.UserSessionRes;
+import vn.project.group_lottery.dto.Request.UserDTOSession;
 import vn.project.group_lottery.model.User;
 
 @Service
 public class SessionService {
     public void setSessionUser(HttpSession session, User user) {
-        UserSessionRes userSessionRes = new UserSessionRes();
-        Converter.userConvertTSessionRes(user, userSessionRes);
-        session.setAttribute("userSessionRes", userSessionRes);
+        UserDTOSession userDTOSession = new UserDTOSession();
+        Converter.userConvertToUserSession(user, userDTOSession);
+        session.setAttribute("userDTOSession", userDTOSession);
     }
 }

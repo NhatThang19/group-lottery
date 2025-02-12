@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import vn.project.group_lottery.dto.Converter;
-import vn.project.group_lottery.dto.Response.UserRes;
+import vn.project.group_lottery.dto.UserDTO;
 import vn.project.group_lottery.model.User;
 import vn.project.group_lottery.repository.UserRepository;
 
@@ -55,11 +55,11 @@ public class UserService {
         return this.userRepository.findUserByUsername(username);
     }
 
-    public List<UserRes> getAllUser() {
+    public List<UserDTO> getAllUser() {
         List<User> users = userRepository.findAll();
 
         return users.stream()
-                .map(user -> Converter.userConvertToUserRes(user, new UserRes()))
+                .map(user -> Converter.userConvertToUserDTO(user, new UserDTO()))
                 .collect(Collectors.toList());
     }
 }

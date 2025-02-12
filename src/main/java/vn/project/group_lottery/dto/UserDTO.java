@@ -1,4 +1,4 @@
-package vn.project.group_lottery.dto.Response;
+package vn.project.group_lottery.dto;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class UserRes {
+public class UserDTO {
     private Long id;
     private String username;
     private String email;
