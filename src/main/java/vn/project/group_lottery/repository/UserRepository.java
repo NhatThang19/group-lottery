@@ -1,6 +1,7 @@
 package vn.project.group_lottery.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -13,6 +14,10 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
     User save(User user);
 
     List<User> findAll();
+
+    Optional<User> findById(long id);
+
+    void deleteById(long id);
 
     User findUserByUsername(String username);
 

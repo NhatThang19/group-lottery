@@ -2,20 +2,26 @@ $(document).ready(function () {
     deleteUser();
     formatAllDateTime();
     formatAllCurrency();
+    imagePreview();
 });
 
 function deleteUser() {
     $(document).on("click", ".delete-btn", function (e) {
         e.preventDefault();
-        let userId = $(this).attr("data-id");
+        let form = $(this).closest("form");
 
-        confirmAction({
-            title: "Xóa người dùng?",
+        Swal.fire({
+            title: "Bạn có chắc chắn muốn xóa?",
             text: "Dữ liệu người dùng sẽ bị xóa vĩnh viễn!",
-            confirmText: "Xóa ngay!",
-            confirmColor: "#d33",
-            onConfirm: function () {
-                window.location.href = "admin/user/delete/" + userId;
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Xóa ngay!",
+            cancelButtonText: "Hủy"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                form.submit();
             }
         });
     });
@@ -36,3 +42,28 @@ function formatAllCurrency() {
         }
     });
 }
+
+function imagePreview() {
+    $(document).ready(function () {
+        var avatarImg = $(".avatarPreview");
+
+        if (avatarImg.attr("src") && avatarImg.attr("src").trim() !== "") {
+            avatarImg.show();
+        }
+
+        $(".avatar-input").on("change", function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    avatarImg.attr("src", e.target.result).show();
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+}
+
+
+
+

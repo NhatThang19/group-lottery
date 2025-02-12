@@ -39,3 +39,15 @@ function formatDateTime(localDateTime) {
 function formatCurrency(amount) {
     return amount.toLocaleString("vi-VN").replace(/,/g, ".");
 }
+
+function showToast(message, heading, icon, loaderBg) {
+    Swal.fire({
+        title: heading,
+        text: message,
+        icon: icon, // 'success', 'error', 'warning', 'info'
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        background: loaderBg,
+    });
+}

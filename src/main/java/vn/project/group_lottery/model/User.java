@@ -11,6 +11,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -39,6 +41,7 @@ public class User extends Auditable {
 
     @NotNull(message = "Ngày sinh không được để trống")
     @Past(message = "Ngày sinh phải là ngày trong quá khứ")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate dateOfBirth;
 
     @NotNull(message = "Giới tính không được để trống")

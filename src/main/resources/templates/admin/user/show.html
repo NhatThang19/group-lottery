@@ -36,7 +36,7 @@
                             <h4 class="fw-bold mb-3">Quản lý người dùng</h4>
                         </div>
                         <div class="ms-md-auto py-2 py-md-0">
-                            <a href="#" class="btn btn-primary btn-round">Thêm người dùng</a>
+                            <a href="/admin/user/create" class="btn btn-primary btn-round">Thêm người dùng</a>
                         </div>
                     </div>
                 </div>
@@ -62,11 +62,17 @@
                                 <td th:attr="data-time=${user.lastModifiedDate}"></td>
                                 <td th:attr="data-balance=${user.balance}"></td>
                                 <td>
-                                    <a th:href="@{/users/detail/{id}(id=${user.id})}"
+                                    <a th:href="@{/admin/user/detail/{id}(id=${user.id})}"
                                         class="btn btn-info btn-sm">Xem</a>
-                                    <a th:href="@{/users/edit/{id}(id=${user.id})}"
+                                    <a th:href="@{/admin/user/update/{id}(id=${user.id})}"
                                         class="btn btn-warning btn-sm">Sửa</a>
-                                    <a href="#" class="btn btn-danger btn-sm delete-btn" th:data-id="${user.id}">Xóa</a>
+                                    <form th:action="@{/admin/user/delete}" method="post" class="delete-form"
+                                        style="display: inline;">
+                                        <input type="hidden" name="id" th:value="${user.id}" />
+                                        <button type="submit" class="btn btn-danger btn-sm delete-btn">
+                                            Xóa
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         </tbody>
@@ -75,6 +81,7 @@
             </div>
         </div>
     </div>
+    <th:block layout:fragment="extra-js"></th:block>
 </body>
 
 </html>

@@ -3,7 +3,7 @@
     layout:decorate="~{layout/admin/admin-layout}">
 
 <head>
-    <title>Thêm người dùng</title>
+    <title>Cập nhật</title>
 </head>
 
 <body>
@@ -29,7 +29,7 @@
                     <i class="icon-arrow-right"></i>
                 </li>
                 <li class="nav-item">
-                    <a href="#">Thêm</a>
+                    <a href="#">Cập nhật</a>
                 </li>
             </ul>
         </div>
@@ -39,13 +39,15 @@
                 <div class="card-header">
                     <div class="d-flex align-items-left align-items-md-center flex-column flex-md-row pt-2 pb-4">
                         <div>
-                            <h4 class="fw-bold mb-3">Thêm người dùng</h4>
+                            <h4 class="fw-bold mb-3">Cập nhật người dùng</h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
-                    <form th:action="@{/admin/user/create}" th:object="${user}" method="post"
+                    <form th:action="@{/admin/user/update}" th:object="${userDTO}" method="post"
                         enctype="multipart/form-data">
+                        <input type="hidden" th:field="*{id}" />
+                        <input type="hidden" th:field="*{balance}" />
                         <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Tên đăng nhập</label>
@@ -56,16 +58,6 @@
                                     class="invalid-feedback"></div>
                             </div>
                             <div class="col col-md-6">
-                                <label class="form-label">Mật khẩu</label>
-                                <input type="password" th:field="*{password}" class="form-control"
-                                    th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''"
-                                    autocomplete="off" />
-                                <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}"
-                                    class="invalid-feedback"></div>
-                            </div>
-                        </div>
-                        <div class="row mb-3">
-                            <div class="col col-md-6">
                                 <label class="form-label">Email</label>
                                 <input type="email" th:field="*{email}" class="form-control"
                                     th:classappend="${#fields.hasErrors('email')}? 'is-invalid' : ''"
@@ -73,6 +65,8 @@
                                 <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}"
                                     class="invalid-feedback"></div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Số điện thoại</label>
                                 <input type="text" th:field="*{phone}" class="form-control"
@@ -81,8 +75,6 @@
                                 <div th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"
                                     class="invalid-feedback"></div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Địa chỉ</label>
                                 <input type="text" th:field="*{address}" class="form-control"
@@ -91,6 +83,8 @@
                                 <div th:if="${#fields.hasErrors('address')}" th:errors="*{address}"
                                     class="invalid-feedback"></div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Ngày sinh</label>
                                 <input id="dateOfBirth" class="form-control" type="date" th:field="*{dateOfBirth}"
@@ -99,8 +93,6 @@
                                     class="invalid-feedback">
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Giới tính</label>
                                 <select th:field="*{gender}" class="form-control"
@@ -112,6 +104,8 @@
                                 <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}"
                                     class="invalid-feedback"></div>
                             </div>
+                        </div>
+                        <div class="row mb-3">
                             <div class="col col-md-6">
                                 <label class="form-label">Trạng thái</label>
                                 <select th:field="*{status}" class="form-control"
@@ -123,19 +117,20 @@
                                 <div th:if="${#fields.hasErrors('status')}" th:errors="*{status}"
                                     class="invalid-feedback"></div>
                             </div>
-                        </div>
-                        <div class="row mb-5">
                             <div class="col col-md-6">
                                 <label class="form-label">Vai trò</label>
-                                <select th:field="*{role}" class="form-control"
-                                    th:classappend="${#fields.hasErrors('role')} ? 'is-invalid' : ''">
+                                <select th:field="*{roleId}" class="form-control"
+                                    th:classappend="${#fields.hasErrors('roleId')} ? 'is-invalid' : ''">
                                     <option value="">-- Chọn vai trò --</option>
                                     <option value="1">Quản trị viên</option>
                                     <option value="2">Người dùng</option>
                                 </select>
-                                <div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="invalid-feedback">
+                                <div th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}"
+                                    class="invalid-feedback">
                                 </div>
                             </div>
+                        </div>
+                        <div class="row mb-5">
                             <div class="col col-md-6">
                                 <label class="form-label">Ảnh đại diện</label>
                                 <input class="form-control avatar-input" type="file" accept=".png, .jpg, .jpeg"
@@ -145,10 +140,11 @@
                         <div class="row mb-3">
                             <div class="col-12 d-flex justify-content-center">
                                 <img class="img-fluid avatarPreview" style="max-height: 250px; display: none;"
-                                    alt="avatar preview" th:src="${user.avatar != null} ? @{${user.avatarUrl}} : ''" />
+                                    alt="avatar preview"
+                                    th:src="${userDTO.avatar != null} ? '/common/avatar/' + @{${userDTO.avatar}} : ''" />
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary float-end">Thêm</button>
+                        <button type="submit" class="btn btn-warning float-end">Cập nhật</button>
                     </form>
                 </div>
             </div>

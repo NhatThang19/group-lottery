@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.HttpSession;
 import vn.project.group_lottery.dto.Converter;
-import vn.project.group_lottery.dto.Request.UserDTOSession;
+import vn.project.group_lottery.dto.UserDTOSession;
 import vn.project.group_lottery.model.User;
 
 @Service

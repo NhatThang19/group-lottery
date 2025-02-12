@@ -1,4 +1,4 @@
-package vn.project.group_lottery.dto.Request;
+package vn.project.group_lottery.dto;
 
 import java.io.Serializable;
 

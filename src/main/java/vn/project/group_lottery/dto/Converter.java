@@ -2,9 +2,11 @@ package vn.project.group_lottery.dto;
 
 import vn.project.group_lottery.dto.Request.RegisterInfoReq;
 import vn.project.group_lottery.dto.Request.RegisterReq;
-import vn.project.group_lottery.dto.Request.UserDTOSession;
 import vn.project.group_lottery.enums.Gender;
+import vn.project.group_lottery.enums.UserStatus;
+import vn.project.group_lottery.model.Role;
 import vn.project.group_lottery.model.User;
+import vn.project.group_lottery.model.Wallet;
 
 public class Converter {
     public static User registerReqConvertToUser(User user, RegisterReq registerReq, RegisterInfoReq registerInfoReq) {
@@ -52,5 +54,32 @@ public class Converter {
         userRes.setBalance(user.getWallet().getBalance());
 
         return userRes;
+    }
+
+    public static User userDTOConvertToUser(UserDTO userDTO, User user) {
+        user.setId(userDTO.getId());
+        user.setUsername(userDTO.getUsername());
+        user.setEmail(userDTO.getEmail());
+        user.setPhone(userDTO.getPhone());
+        user.setDateOfBirth(userDTO.getDateOfBirth());
+        user.setAddress(userDTO.getAddress());
+        user.setGender(Gender.valueOf(userDTO.getGender()));
+        user.setAvatar(userDTO.getAvatar());
+        user.setStatus(UserStatus.valueOf(userDTO.getStatus()));
+        user.setLastLogin(userDTO.getLastLogin());
+        user.setCreatedBy(userDTO.getCreatedBy());
+        user.setCreatedDate(userDTO.getCreatedDate());
+        user.setLastModifiedBy(userDTO.getLastModifiedBy());
+        user.setLastModifiedDate(userDTO.getLastModifiedDate());
+
+        Role role = new Role();
+        role.setId(userDTO.getRoleId());
+        user.setRole(role);
+
+        Wallet wallet = new Wallet();
+        wallet.setBalance(userDTO.getBalance());
+        user.setWallet(wallet);
+
+        return user;
     }
 }
