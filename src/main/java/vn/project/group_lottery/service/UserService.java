@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,8 +84,9 @@ public class UserService {
         return this.userRepository.findUserByUsername(username);
     }
 
-    public Page<UserDTO> getAllUser(int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
+    public Page<UserDTO> getAllUser(int page, int size, String sortBy, String direction) {
+        Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
         Page<User> users = userRepository.findAll(pageable);
 
         return users.map(user -> Converter.userConvertToUserDTO(user, new UserDTO()));

@@ -41,12 +41,16 @@ public class UserController {
 
     @GetMapping("")
     public String getUsersPage(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "2") int size, @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "asc") String direction,
             Model model) {
         model.addAttribute("path", PATH);
 
-        Page<UserDTO> users = this.userService.getAllUser(page, size);
+        Page<UserDTO> users = userService.getAllUser(page, size, sortBy, direction);
         model.addAttribute("users", users);
+
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("direction", direction);
 
         return "admin/user/show";
     }
