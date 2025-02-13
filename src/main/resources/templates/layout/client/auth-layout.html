@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title layout:title-pattern="$CONTENT_TITLE - GroupLottery">GroupLottery</title>
     <link rel="stylesheet" th:href="@{/common/css/bootstrap.min.css}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- My CSS -->
+    <link rel="stylesheet" th:href="@{/common/css/util.css}" />
 </head>
 
 <body class="d-flex align-items-center justify-content-center vh-100 bg-light">
@@ -18,9 +22,17 @@
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
+
+    <script th:src="@{/common/js/jquery-3.7.1.min.js}"></script>
+    <script th:src="@{/admin/assets/js/core/popper.min.js}"></script>
+    <script th:src="@{/common/js/bootstrap.min.js}"></script>
+
+    <script th:src="@{/common/js/util.js}"></script>
+    <script th:src="@{/common/js/main.js}"></script>
+
+    <th:block layout:fragment="extra-js"></th:block>
 
 </body>
 

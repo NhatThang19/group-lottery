@@ -81,7 +81,7 @@ public class UserController {
             redirectAttributes.addFlashAttribute("toastLoaderBg", "#f96868");
         }
 
-        return "redirect:/admin/user";
+        return "redirect:/admin/user/create";
     }
 
     @PostMapping("/delete")
@@ -121,22 +121,40 @@ public class UserController {
             RedirectAttributes redirectAttributes,
             Model model) {
 
-        if (bindingResult.hasErrors()) {
-            return "admin/user/update";
-        }
-
         User existingUser = this.userService.getUserById(userDTO.getId())
                 .orElseThrow(
                         () -> new IllegalArgumentException("Không tìm thấy người dùng với ID: " + userDTO.getId()));
 
-        User updatedUser = this.userService.handleUpdateUser(existingUser, userDTO, avatarFile);
+        if (!existingUser.getEmail().equals(userDTO.getEmail())) {
+            if (this.userService.isEmailExists(userDTO.getEmail())) {
+                bindingResult.rejectValue("email", "", "Email đã tồn tại");
+            }
+        }
 
-        this.userService.updateUser(updatedUser);
+        if (!existingUser.getPhone().equals(userDTO.getPhone())) {
+            if (this.userService.isPhoneExists(userDTO.getPhone())) {
+                bindingResult.rejectValue("phone", "", "Số điện thoại đã tồn tại");
+            }
+        }
 
-        redirectAttributes.addFlashAttribute("toastMessage", "Cập nhật người dùng thành công!");
-        redirectAttributes.addFlashAttribute("toastHeading", "Thành công");
-        redirectAttributes.addFlashAttribute("toastIcon", "success");
-        redirectAttributes.addFlashAttribute("toastLoaderBg", "#31ce36");
-        return "redirect:/admin/user";
+        if (bindingResult.hasErrors()) {
+            return "admin/user/update";
+        }
+
+        try {
+            this.userService.handleUpdateUser(existingUser, userDTO, avatarFile);
+
+            redirectAttributes.addFlashAttribute("toastMessage", "Cập nhật người dùng thành công!");
+            redirectAttributes.addFlashAttribute("toastHeading", "Thành công");
+            redirectAttributes.addFlashAttribute("toastIcon", "success");
+            redirectAttributes.addFlashAttribute("toastLoaderBg", "#31ce36");
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("toastMessage", "Lỗi khi cập nhật người dùng: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("toastHeading", "Lỗi");
+            redirectAttributes.addFlashAttribute("toastIcon", "error");
+            redirectAttributes.addFlashAttribute("toastLoaderBg", "#f96868");
+        }
+
+        return "redirect:/admin/user/update/" + existingUser.getId();
     }
 }

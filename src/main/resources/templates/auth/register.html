@@ -18,8 +18,13 @@
             </div>
             <div class="mb-3">
                 <label class="form-label">Mật khẩu</label>
-                <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu"
-                    th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''" autocomplete="off" />
+                <div class="input-group">
+                    <input type="password" th:field="*{password}" class="form-control" placeholder="Nhập mật khẩu"
+                        th:classappend="${#fields.hasErrors('password')}? 'is-invalid' : ''" autocomplete="off" />
+                    <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
                 <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="invalid-feedback"></div>
             </div>
             <div class="mb-3">

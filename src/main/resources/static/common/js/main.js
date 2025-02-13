@@ -1,8 +1,14 @@
+$(window).on('load', function () {
+    $('.loader').addClass('hidden');
+});
+
+
 $(document).ready(function () {
     deleteUser();
     formatAllDateTime();
     formatAllCurrency();
     imagePreview();
+    showPassword();
 });
 
 function deleteUser() {
@@ -61,6 +67,17 @@ function imagePreview() {
                 reader.readAsDataURL(file);
             }
         });
+    });
+}
+
+function showPassword() {
+    $("#togglePassword").click(function () {
+        let passwordField = $("#password");
+        let type = passwordField.attr("type") === "password" ? "text" : "password";
+        passwordField.attr("type", type);
+
+        let icon = $(this).find("i");
+        icon.toggleClass("fa-eye fa-eye-slash");
     });
 }
 

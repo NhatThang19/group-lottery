@@ -2,13 +2,11 @@ package vn.project.group_lottery.config;
 
 import java.util.Collections;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -16,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import vn.project.group_lottery.service.CustomUserDetailsService;
 import vn.project.group_lottery.service.UserService;
@@ -56,8 +55,12 @@ public class SecurityConfig {
         }
 
         @Bean
-        public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService)
+        public SecurityFilterChain filterChain(HttpSecurity http, UserDetailsService userDetailsService,
+                        UserService userService)
                         throws Exception {
+
+                CustomOncePerRequestFilter customOncePerRequestFilter = new CustomOncePerRequestFilter(userService);
+
                 http
                                 .authorizeHttpRequests(auth -> auth
                                                 .requestMatchers(
@@ -68,12 +71,17 @@ public class SecurityConfig {
                                                 .permitAll()
                                                 .requestMatchers("/admin/**", "/admin/assets/**").hasRole("ADMIN")
                                                 .anyRequest().authenticated())
+                                .addFilterBefore(customOncePerRequestFilter, UsernamePasswordAuthenticationFilter.class)
                                 .formLogin(form -> form
                                                 .loginPage("/auth/login")
                                                 .successHandler(customSuccessHandler())
                                                 .failureHandler((request, response, exception) -> {
+                                                        String errorMessage = "Tên đăng nhập hoặc mật khẩu không đúng!";
+                                                        if (exception.getMessage().equals("User is disabled")) {
+                                                                errorMessage = "Tài khoản của bạn đã bị khóa!";
+                                                        }
                                                         request.getSession().setAttribute("loginErrorMessage",
-                                                                        "Tên đăng nhập hoặc mật khẩu không đúng!");
+                                                                        errorMessage);
                                                         response.sendRedirect("/auth/login");
                                                 })
                                                 .permitAll())
