@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +17,7 @@ import vn.project.group_lottery.dto.UserDTO;
 import vn.project.group_lottery.model.User;
 import vn.project.group_lottery.model.Wallet;
 import vn.project.group_lottery.repository.UserRepository;
+import vn.project.group_lottery.service.specification.UserSpecification;
 
 @Service
 public class UserService {
@@ -84,10 +86,14 @@ public class UserService {
         return this.userRepository.findUserByUsername(username);
     }
 
-    public Page<UserDTO> getAllUser(int page, int size, String sortBy, String direction) {
+    public Page<UserDTO> getAllUser(int page, int size, String sortBy, String direction, String search, String status,
+            String role) {
         Sort sort = Sort.by(Sort.Direction.fromString(direction), sortBy);
         Pageable pageable = PageRequest.of(page, size, sort);
-        Page<User> users = userRepository.findAll(pageable);
+
+        Specification<User> spec = UserSpecification.searchUsers(search, status, role);
+
+        Page<User> users = userRepository.findAll(spec, pageable);
 
         return users.map(user -> Converter.userConvertToUserDTO(user, new UserDTO()));
     }

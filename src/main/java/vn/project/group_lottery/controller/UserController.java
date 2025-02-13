@@ -1,5 +1,7 @@
 package vn.project.group_lottery.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -41,16 +43,25 @@ public class UserController {
 
     @GetMapping("")
     public String getUsersPage(@RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "2") int size, @RequestParam(defaultValue = "id") String sortBy,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "id") String sortBy,
             @RequestParam(defaultValue = "asc") String direction,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String status,
+            @RequestParam(required = false) String role,
             Model model) {
         model.addAttribute("path", PATH);
 
-        Page<UserDTO> users = userService.getAllUser(page, size, sortBy, direction);
+        Page<UserDTO> users = userService.getAllUser(page, size, sortBy, direction, search, status, role);
         model.addAttribute("users", users);
-
         model.addAttribute("sortBy", sortBy);
         model.addAttribute("direction", direction);
+        model.addAttribute("search", search);
+        model.addAttribute("status", status);
+        model.addAttribute("role", role);
+
+        model.addAttribute("statusOptions", List.of("active", "banned")); // Ví dụ
+        model.addAttribute("roleOptions", List.of("admin", "user")); // Ví dụ
 
         return "admin/user/show";
     }

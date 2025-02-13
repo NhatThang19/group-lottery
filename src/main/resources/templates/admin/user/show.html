@@ -36,6 +36,29 @@
                             <h4 class="fw-bold mb-3">Quản lý người dùng</h4>
                         </div>
                         <div class="ms-md-auto py-2 py-md-0">
+                            <form th:action="@{/admin/user}" method="get" class="d-flex">
+                                <input type="text" name="search" th:value="${search}" class="form-control me-2"
+                                    placeholder="Tìm kiếm theo tên">
+
+                                <select name="status" class="form-control me-2">
+                                    <option value="">Tất cả trạng thái</option>
+                                    <option th:each="statusOption : ${statusOptions}" th:value="${statusOption}"
+                                        th:text="${statusOption}" th:selected="${status == statusOption}">
+                                    </option>
+                                </select>
+
+                                <select name="role" class="form-control me-2">
+                                    <option value="">Tất cả vai trò</option>
+                                    <option th:each="roleOption : ${roleOptions}" th:value="${roleOption}"
+                                        th:text="${roleOption}" th:selected="${role == roleOption}">
+                                    </option>
+                                </select>
+
+                                <button type="submit" class="btn btn-primary"><i class="
+                                    fas fa-search"></i></button>
+                            </form>
+                        </div>
+                        <div class="ms-md-auto py-2 py-md-0">
                             <a href="/admin/user/create" class="btn btn-primary btn-round">Thêm người dùng</a>
                         </div>
                     </div>
@@ -65,6 +88,7 @@
                                     </a>
                                 </th>
                                 <th scope="col">Trạng thái</th>
+                                <th scope="col">Vai trò</th>
                                 <th scope="col">Lần sửa cuối bởi</th>
                                 <th scope="col">Thời gian sửa cuối</th>
                                 <th>
@@ -85,6 +109,7 @@
                                 <td th:text="${user.id}"></td>
                                 <td th:text="${user.username}"></td>
                                 <td th:text="${user.status}"></td>
+                                <td th:text="${user.role}"></td>
                                 <td th:text="${user.lastModifiedBy}"></td>
                                 <td th:attr="data-time=${user.lastModifiedDate}"></td>
                                 <td th:attr="data-balance=${user.balance}"></td>
@@ -92,7 +117,7 @@
                                     <a th:href="@{/admin/user/detail/{id}(id=${user.id})}"
                                         class="btn btn-info btn-sm">Xem</a>
                                     <a th:href="@{/admin/user/update/{id}(id=${user.id})}"
-                                        class="btn btn-warning btn-sm">Sửa</a>
+                                        class="btn btn-warning btn-sm text-white">Sửa</a>
                                     <form th:action="@{/admin/user/delete}" method="post" class="delete-form"
                                         style="display: inline;">
                                         <input type="hidden" name="id" th:value="${user.id}" />
