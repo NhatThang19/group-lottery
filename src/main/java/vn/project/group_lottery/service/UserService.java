@@ -1,9 +1,10 @@
 package vn.project.group_lottery.service;
 
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,16 +61,6 @@ public class UserService {
         return this.createUser(user);
     }
 
-    public User handleUpdateUser(User user, UserDTO userDTO, MultipartFile image) {
-        Converter.userDTOConvertToUser(userDTO, user);
-
-        if (image != null) {
-            user.setAvatar(this.uploadImgService.handleSaveUploadImg(image, "avatar"));
-        }
-
-        return this.updateUser(user);
-    }
-
     public User encodedPassword(User user) {
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
@@ -92,11 +83,10 @@ public class UserService {
         return this.userRepository.findUserByUsername(username);
     }
 
-    public List<UserDTO> getAllUser() {
-        List<User> users = userRepository.findAll();
+    public Page<UserDTO> getAllUser(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<User> users = userRepository.findAll(pageable);
 
-        return users.stream()
-                .map(user -> Converter.userConvertToUserDTO(user, new UserDTO()))
-                .collect(Collectors.toList());
+        return users.map(user -> Converter.userConvertToUserDTO(user, new UserDTO()));
     }
 }

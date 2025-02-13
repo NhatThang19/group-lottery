@@ -1,7 +1,6 @@
 package vn.project.group_lottery.controller;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,7 +16,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import jakarta.validation.Valid;
 import vn.project.group_lottery.dto.Converter;
 import vn.project.group_lottery.dto.UserDTO;
+import vn.project.group_lottery.enums.Gender;
+import vn.project.group_lottery.enums.UserStatus;
 import vn.project.group_lottery.model.User;
+import vn.project.group_lottery.service.RoleService;
+import vn.project.group_lottery.service.UploadImgService;
 import vn.project.group_lottery.service.UserService;
 
 @Controller
@@ -25,19 +28,25 @@ import vn.project.group_lottery.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final RoleService roleService;
+    private final UploadImgService uploadImgService;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, RoleService roleService, UploadImgService uploadImgService) {
         this.userService = userService;
+        this.roleService = roleService;
+        this.uploadImgService = uploadImgService;
     }
 
     private static final String PATH = "USER";
 
     @GetMapping("")
-    public String getUserPage(Model model) {
+    public String getUsersPage(@RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
         model.addAttribute("path", PATH);
 
-        List<UserDTO> userDTOs = this.userService.getAllUser();
-        model.addAttribute("users", userDTOs);
+        Page<UserDTO> users = this.userService.getAllUser(page, size);
+        model.addAttribute("users", users);
 
         return "admin/user/show";
     }
@@ -142,7 +151,18 @@ public class UserController {
         }
 
         try {
-            this.userService.handleUpdateUser(existingUser, userDTO, avatarFile);
+            existingUser.setUsername(userDTO.getUsername());
+            existingUser.setEmail(userDTO.getEmail());
+            existingUser.setPhone(userDTO.getPhone());
+            existingUser.setAddress(userDTO.getAddress());
+            existingUser.setDateOfBirth(userDTO.getDateOfBirth());
+            existingUser.setGender(Gender.valueOf(userDTO.getGender()));
+            existingUser.setStatus(UserStatus.valueOf(userDTO.getStatus()));
+            existingUser.setRole(this.roleService.getRoleByName(userDTO.getRole()));
+
+            if (avatarFile != null) {
+                existingUser.setAvatar(uploadImgService.handleSaveUploadImg(avatarFile, "avatar"));
+            }
 
             redirectAttributes.addFlashAttribute("toastMessage", "Cập nhật người dùng thành công!");
             redirectAttributes.addFlashAttribute("toastHeading", "Thành công");

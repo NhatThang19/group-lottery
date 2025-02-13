@@ -119,14 +119,13 @@
                             </div>
                             <div class="col col-md-6">
                                 <label class="form-label">Vai trò</label>
-                                <select th:field="*{roleId}" class="form-control"
-                                    th:classappend="${#fields.hasErrors('roleId')} ? 'is-invalid' : ''">
+                                <select th:field="*{role}" class="form-control"
+                                    th:classappend="${#fields.hasErrors('role')} ? 'is-invalid' : ''">
                                     <option value="">-- Chọn vai trò --</option>
-                                    <option value="1">Quản trị viên</option>
-                                    <option value="2">Người dùng</option>
+                                    <option value="admin">Quản trị viên</option>
+                                    <option value="user">Người dùng</option>
                                 </select>
-                                <div th:if="${#fields.hasErrors('roleId')}" th:errors="*{roleId}"
-                                    class="invalid-feedback">
+                                <div th:if="${#fields.hasErrors('role')}" th:errors="*{role}" class="invalid-feedback">
                                 </div>
                             </div>
                         </div>

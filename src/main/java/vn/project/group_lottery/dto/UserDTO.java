@@ -34,7 +34,7 @@ public class UserDTO {
     private String status;
     private LocalDateTime lastLogin;
     @NotNull(message = "Vai trò không được để trống")
-    private Long roleId;
+    private String role;
     private LocalDateTime createdDate;
     private String createdBy;
     private LocalDateTime lastModifiedDate;

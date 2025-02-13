@@ -77,6 +77,43 @@
                             </tr>
                         </tbody>
                     </table>
+                    <!-- Pagination -->
+                    <nav aria-label="Page navigation">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${users.first} ? 'disabled' : ''">
+                                <a class="page-link" th:href="@{/admin/user(page=0, size=${users.size})}"
+                                    aria-label="First">
+                                    <span aria-hidden="true">«</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:classappend="${users.hasPrevious()} ? '' : 'disabled'">
+                                <a class="page-link"
+                                    th:href="@{/admin/user(page=${users.number - 1}, size=${users.size})}"
+                                    aria-label="Previous">
+                                    <span aria-hidden="true">‹</span>
+                                </a>
+                            </li>
+                            <li th:each="i : ${#numbers.sequence(1, users.totalPages)}"
+                                th:classappend="${i - 1 == users.number} ? 'active' : ''" class="page-item">
+                                <a class="page-link" th:href="@{/admin/user(page=${i - 1}, size=${users.size})}"
+                                    th:text="${i}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${users.hasNext()} ? '' : 'disabled'">
+                                <a class="page-link"
+                                    th:href="@{/admin/user(page=${users.number + 1}, size=${users.size})}"
+                                    aria-label="Next">
+                                    <span aria-hidden="true">›</span>
+                                </a>
+                            </li>
+                            <li class="page-item" th:classappend="${users.last} ? 'disabled' : ''">
+                                <a class="page-link"
+                                    th:href="@{/admin/user(page=${users.totalPages - 1}, size=${users.size})}"
+                                    aria-label="Last">
+                                    <span aria-hidden="true">»</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </div>

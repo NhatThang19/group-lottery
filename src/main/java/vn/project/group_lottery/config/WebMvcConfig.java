@@ -4,6 +4,7 @@ import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -15,6 +16,12 @@ import org.thymeleaf.extras.springsecurity6.dialect.SpringSecurityDialect;
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig implements WebMvcConfigurer {
+
+    private final SessionUpdateInterceptor sessionUpdateInterceptor;
+
+    public WebMvcConfig(SessionUpdateInterceptor sessionUpdateInterceptor) {
+        this.sessionUpdateInterceptor = sessionUpdateInterceptor;
+    }
 
     @Bean
     public ClassLoaderTemplateResolver templateResolver() {
@@ -60,5 +67,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
         registry.addResourceHandler("/common/**")
                 .addResourceLocations("classpath:/static/common/");
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(sessionUpdateInterceptor).addPathPatterns("/**");
     }
 }

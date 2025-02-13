@@ -23,6 +23,10 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         vn.project.group_lottery.model.User user = this.userService.getUserByUsername(username);
 
+        if (user == null) {
+            throw new UsernameNotFoundException("Không tìm thấy User " + username);
+        }
+
         if (user.getStatus().toString() == "banned") {
             throw new DisabledException("User is disabled");
         }

@@ -31,7 +31,15 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
             String username = authentication.getName();
             User user = userService.getUserByUsername(username);
 
-            if (user != null && user.getStatus() == UserStatus.banned) {
+            // Nếu user null -> xóa context và redirect về trang login
+            if (user == null) {
+                SecurityContextHolder.clearContext();
+                response.sendRedirect("/auth/login?error=user_not_found");
+                return;
+            }
+
+            // Nếu user bị ban -> xóa session, xóa context và redirect về trang login
+            if (user.getStatus() == UserStatus.banned) {
                 HttpSession session = request.getSession(false);
                 if (session != null) {
                     session.invalidate();
@@ -43,7 +51,7 @@ public class CustomOncePerRequestFilter extends OncePerRequestFilter {
             }
         }
 
-        // Tiếp tục request nếu không bị ban
+        // Tiếp tục request nếu user hợp lệ
         filterChain.doFilter(request, response);
     }
 }
