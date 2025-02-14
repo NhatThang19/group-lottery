@@ -20,12 +20,14 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserService userService;
     private final WalletService walletService;
+    private final AuthService authService;
 
     public TransactionService(TransactionRepository transactionRepository, UserService userService,
-            WalletService walletService) {
+            WalletService walletService, AuthService authService) {
         this.transactionRepository = transactionRepository;
         this.userService = userService;
         this.walletService = walletService;
+        this.authService = authService;
     }
 
     public Transaction saveTransaction(Transaction transaction) {
@@ -58,6 +60,10 @@ public class TransactionService {
     public void handleWithdrawal(String username, WithdrawalDTO withdrawalDTO) throws Exception {
         User user = userService.getUserByUsername(username);
         Wallet wallet = user.getWallet();
+
+        if (!authService.isPasswordMatch(withdrawalDTO.getPassword(), user.getPassword())) {
+            throw new Exception("Sai mật khẩu");
+        }
 
         if (wallet.getBalance() < withdrawalDTO.getAmount()) {
             throw new Exception("Số dư không đủ để rút tiền.");

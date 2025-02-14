@@ -1,5 +1,6 @@
 package vn.project.group_lottery.service;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import vn.project.group_lottery.dto.Converter;
@@ -14,11 +15,14 @@ public class AuthService {
     private final RoleService roleService;
     private final UserService userService;
     private final WalletService walletService;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(RoleService roleService, UserService userService, WalletService walletService) {
+    public AuthService(RoleService roleService, UserService userService, WalletService walletService,
+            PasswordEncoder passwordEncoder) {
         this.roleService = roleService;
         this.userService = userService;
         this.walletService = walletService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User registerUser(RegisterReq registerReq, RegisterInfoReq registerInfoReq) {
@@ -34,5 +38,9 @@ public class AuthService {
         user.setWallet(wallet);
 
         return this.userService.createUser(user);
+    }
+
+    public boolean isPasswordMatch(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
     }
 }

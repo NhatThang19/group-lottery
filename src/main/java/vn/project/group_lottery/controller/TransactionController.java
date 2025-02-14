@@ -13,7 +13,6 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vn.project.group_lottery.dto.WithdrawalDTO;
 import vn.project.group_lottery.enums.BankName;
-import vn.project.group_lottery.model.Withdrawal;
 import vn.project.group_lottery.service.TransactionService;
 
 @Controller
