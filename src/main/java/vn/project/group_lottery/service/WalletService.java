@@ -1,5 +1,6 @@
 package vn.project.group_lottery.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -21,5 +22,9 @@ public class WalletService {
 
     public Wallet saveWallet(Wallet wallet) {
         return this.walletRepository.save(wallet);
+    }
+
+    public void saveAllWallet(List<Wallet> wallets) {
+        walletRepository.saveAll(wallets);
     }
 }

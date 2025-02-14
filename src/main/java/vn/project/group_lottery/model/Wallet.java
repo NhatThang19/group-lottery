@@ -6,11 +6,17 @@ import java.util.List;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "wallets")
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode(exclude = { "user" })
 public class Wallet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

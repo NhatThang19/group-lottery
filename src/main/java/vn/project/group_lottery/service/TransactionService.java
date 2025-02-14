@@ -1,12 +1,14 @@
 package vn.project.group_lottery.service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import vn.project.group_lottery.dto.TicketDTO;
 import vn.project.group_lottery.dto.WithdrawalDTO;
@@ -15,6 +17,7 @@ import vn.project.group_lottery.enums.TicketStatus;
 import vn.project.group_lottery.enums.TransactionStatus;
 import vn.project.group_lottery.enums.TransactionType;
 import vn.project.group_lottery.model.Draw;
+import vn.project.group_lottery.model.Prize;
 import vn.project.group_lottery.model.Ticket;
 import vn.project.group_lottery.model.Transaction;
 import vn.project.group_lottery.model.User;
@@ -132,11 +135,80 @@ public class TransactionService {
         transaction.setAmount(ticketDTO.getPrice());
         transaction.setTransactionType(TransactionType.BET);
         transaction.setCreatedDate(LocalDateTime.now());
-        transaction.setStatus(TransactionStatus.PENDING);
+        transaction.setStatus(TransactionStatus.SUCCESS);
         transaction.setWallet(user.getWallet());
         transaction.setTicket(ticket);
 
         this.saveTransaction(transaction);
+    }
+
+    @Transactional
+    public long handelPrizeTransaction() {
+
+        List<Ticket> winningTickets = ticketService.findWinningTicket();
+
+        List<Ticket> allTickets = ticketService.findTicketsByDraw();
+
+        if (allTickets.isEmpty()) {
+            return 0;
+        }
+
+        Draw draw = allTickets.get(0).getDraw();
+        Prize prize = draw.getPrize();
+        if (prize == null) {
+            throw new EntityNotFoundException("Không tìm thấy thông tin giải thưởng cho vòng quay này!");
+        }
+
+        Long totalPrizeAmount = 0L;
+        for (Ticket winningTicket : winningTickets) {
+            switch (winningTicket.getStatus()) {
+                case JACKPOT:
+                    totalPrizeAmount += prize.getJackpot();
+                    break;
+                case FIRST:
+                    totalPrizeAmount += prize.getFirstPrize();
+                    break;
+                case SECOND:
+                    totalPrizeAmount += prize.getSecondPrize();
+                    break;
+                case THIRD:
+                    totalPrizeAmount += prize.getThirdPrize();
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        // Nhóm các vé theo người chơi
+        Map<User, List<Ticket>> ticketsByUser = allTickets.stream()
+                .collect(Collectors.groupingBy(Ticket::getUser));
+
+        // Tính số lượng người chơi duy nhất
+        int numberOfParticipants = ticketsByUser.size();
+
+        // Chia đều tổng tiền thưởng cho số lượng người chơi
+        Long prizePerParticipant = totalPrizeAmount / numberOfParticipants;
+
+        // Cập nhật số dư ví và lưu giao dịch
+        List<Wallet> walletsToUpdate = new ArrayList<>();
+        List<Transaction> transactionsToSave = new ArrayList<>();
+
+        for (Map.Entry<User, List<Ticket>> entry : ticketsByUser.entrySet()) {
+            User user = entry.getKey();
+            if (user == null) {
+                throw new EntityNotFoundException("Không tìm thấy thông tin người dùng");
+            }
+
+            Wallet wallet = user.getWallet();
+            wallet.setBalance(wallet.getBalance() + prizePerParticipant);
+            walletsToUpdate.add(wallet);
+        }
+
+        // Lưu thay đổi vào cơ sở dữ liệu
+        walletService.saveAllWallet(walletsToUpdate);
+        transactionRepository.saveAll(transactionsToSave);
+
+        return totalPrizeAmount;
     }
 
 }

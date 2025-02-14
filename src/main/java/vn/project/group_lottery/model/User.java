@@ -3,6 +3,7 @@ package vn.project.group_lottery.model;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import vn.project.group_lottery.enums.Gender;
@@ -25,6 +26,7 @@ import jakarta.validation.constraints.Size;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@EqualsAndHashCode(exclude = { "wallet" })
 public class User extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

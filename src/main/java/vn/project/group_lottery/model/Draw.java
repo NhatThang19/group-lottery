@@ -15,7 +15,6 @@ import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 @Entity
 @Data
@@ -33,8 +32,9 @@ public class Draw {
 
     private long totalPrize = 0;
 
+    private boolean isProcessed = false;
+
     @OneToMany(mappedBy = "draw", cascade = CascadeType.ALL)
-    @ToString.Exclude
     private List<Ticket> ticket;
 
     @OneToOne(cascade = CascadeType.ALL)
