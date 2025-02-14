@@ -1,0 +1,76 @@
+<header class="header-section">
+    <div class="header-warp">
+        <div class="header-social d-flex justify-content-end">
+            <p>Theo dõi:</p>
+            <a href="#"><i class="fa fa-pinterest"></i></a>
+            <a href="#"><i class="fa fa-facebook"></i></a>
+            <a href="#"><i class="fa fa-twitter"></i></a>
+            <a href="#"><i class="fa fa-dribbble"></i></a>
+            <a href="#"><i class="fa fa-behance"></i></a>
+        </div>
+        <div class="header-bar-warp d-flex">
+            <!-- site logo -->
+            <a href="/" class="site-logo">
+                <h3 style="color: #B31BA9;">GroupLottery</h3>
+            </a>
+            <nav class="top-nav-area w-100">
+                <div class="user-panel">
+                    <div sec:authorize="isAuthenticated()">
+                        <div class="d-flex">
+                            <div class="wallet me-3">
+                                <span>Số dư: </span>
+                                <div class="float-end">
+                                    <span class="balance" th:attr="
+                                        data-balance=${session.userDTOSession.balance}"></span>
+                                    <span>VND</span>
+                                </div>
+                            </div>
+                            <div class=" dropdown-center">
+                                <button class="btn p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img th:src="@{'/common/avatar/' + ${session.userDTOSession.avatar}}"
+                                        alt="image profile" class="img-fluid rounded"
+                                        style="width: 55px; height: 55px;" />
+                                </button>
+                                <ul class="dropdown-menu dropdown-menu-dark">
+                                    <li><a class="dropdown-item" href="#">Hồ sơ</a></li>
+                                    <div sec:authorize="hasRole('ROLE_ADMIN')">
+                                        <li><a class="dropdown-item" href="/admin">Trang quản trị</a></li>
+                                    </div>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="/deposit">Nạp tiền</a></li>
+                                    <li><a class="dropdown-item" href="/withdrawal">Rút tiền</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="#">Thể lệ</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <form th:action="@{/auth/logout}" method="post">
+                                        <a class="dropdown-item" type="submit" href="javascript:void(0)"
+                                            onclick="this.closest('form').submit();">Đăng
+                                            xuất</a>
+                                    </form>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div sec:authorize="isAnonymous()">
+                        <a th:href="@{/auth/login}">Đăng nhập</a> / <a th:href="@{/auth/register}">Đăng
+                            ký</a>
+                    </div>
+                </div>
+                <!-- Menu -->
+                <ul class="main-menu primary-menu">
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="#">Trúng thưởng</a></li>
+                    <li><a href="#">Tin tức</a></li>
+                    <li><a href="#">Thể lệ</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>

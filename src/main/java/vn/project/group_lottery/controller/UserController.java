@@ -60,8 +60,8 @@ public class UserController {
         model.addAttribute("status", status);
         model.addAttribute("role", role);
 
-        model.addAttribute("statusOptions", List.of("active", "banned")); // Ví dụ
-        model.addAttribute("roleOptions", List.of("admin", "user")); // Ví dụ
+        model.addAttribute("statusOptions", List.of("active", "banned"));
+        model.addAttribute("roleOptions", List.of("admin", "user"));
 
         return "admin/user/show";
     }

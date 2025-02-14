@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/client/client-layout}">
+
+<head>
+    <title>Trang chủ</title>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <!-- Hero section -->
+        <section class="hero-section overflow-hidden">
+            <div class="hero-slider owl-carousel">
+                <div class="hero-item set-bg d-flex align-items-center justify-content-center text-center"
+                    data-setbg="client/assets/img/slider-bg-1.jpg">
+                    <div class="container">
+                        <h2>Game on!</h2>
+                        <p>Đoàn kết không chỉ là làm việc cùng nhau mà là tạo dựng một môi trường làm việc nơi mọi người
+                            có
+                            thể hỗ trợ, giúp đỡ nhau cùng phát triển.</p>
+                        <a href="#" class="site-btn">Chơi ngay <img th:src="@{client/assets/img/icons/double-arrow.png}"
+                                alt="#" /></a>
+                    </div>
+                </div>
+                <div class="hero-item set-bg d-flex align-items-center justify-content-center text-center"
+                    data-setbg="client/assets/img/slider-bg-2.jpg">
+                    <div class="container">
+                        <h2>Game on!</h2>
+                        <p>Khi chúng ta hướng về cùng một mục tiêu, cùng chung một chí hướng, không có gì là không thể.
+                        </p>
+                        <a href="#" class="site-btn">Chơi ngay <img th:src="@{client/assets/img/icons/double-arrow.png}"
+                                alt="#" /></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- Hero section end-->
+    </div>
+</body>
+
+</html>

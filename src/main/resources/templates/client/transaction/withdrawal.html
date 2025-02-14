@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/client/client-layout}">
+
+<head>
+    <title>Rút tiền</title>
+
+    <th:block layout:fragment="extra-css">
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <section class="page-top-section set-bg" data-setbg="client/assets/img/page-top-bg/1.jpg"
+            style="background-image: url(&quot;client/assets/img/page-top-bg/1.jpg&quot;);">
+            <div class="page-info">
+                <h2>Rút tiền</h2>
+                <div class="site-breadcrumb">
+                    <a href="/">Home</a> /
+                    <span>Nạp tiền</span>
+                </div>
+            </div>
+        </section>
+        <section class="blog-section spad">
+            <div class="container text-white">
+                <form th:action="@{/withdrawal}" method="post" th:object="${withdrawalDTO}">
+                    <div class="row mb-3">
+                        <div class="col col-md-6">
+                            <label for="amount" class="form-label">Số tiền:</label>
+                            <input type="number" class="form-control" id="amount" autocomplete="off"
+                                th:field="*{amount}">
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="bankName" class="form-label">Tên ngân hàng:</label>
+                            <select class="form-select" th:field="*{bankName}">
+                                <option value="" selected>Chọn ngân hàng</option>
+                                <option th:each="bank : ${bankNames}" th:value="${bank}" th:text="${bank}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col col-md-6">
+                            <label for="bankNameHolder" class="form-label">Tên chủ thẻ:</label>
+                            <input type="text" class="form-control" id="bankNameHolder" th:field="*{bankNameHolder}"
+                                placeholder="Tên chủ thẻ phải viết hoa không dấu" autocomplete="off">
+                        </div>
+                        <div class="col col-md-6">
+                            <label for="accountNumberHolder" class="form-label">Số tài khoản:</label>
+                            <input type="number" class="form-control" id="accountNumberHolder" autocomplete="off"
+                                th:field="*{accountNumberHolder}">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-12">
+                            <label for="password" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="password" th:field="*{password}">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </section>
+    </div>
+    <th:block layout:fragment="extra-js">
+    </th:block>
+</body>
+
+</html>

@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/client/client-layout}">
+
+<head>
+    <title>Nạp tiền</title>
+
+    <th:block layout:fragment="extra-css">
+        <style>
+            .card {
+                border-radius: 12px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .package-card {
+                background: #fff;
+                border-radius: 8px;
+                padding: 16px;
+                text-align: center;
+                transition: transform 0.2s, box-shadow 0.2s;
+                border: 1px solid #ddd;
+                cursor: pointer;
+            }
+
+            .package-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+                border-color: #007bff;
+            }
+
+            .add-button {
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 6px 12px;
+                border-radius: 4px;
+                transition: 0.3s;
+            }
+
+            .add-button:hover {
+                background-color: #0056b3;
+            }
+
+            .selected-package {
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                padding: 12px;
+                margin-bottom: 12px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background: #ffffff;
+            }
+
+            .remove-button {
+                color: #dc3545;
+                background: none;
+                border: none;
+                padding: 4px 8px;
+                cursor: pointer;
+            }
+
+            .remove-button:hover {
+                background-color: #dc35451a;
+                border-radius: 4px;
+            }
+
+            .empty-cart {
+                text-align: center;
+                color: #6c757d;
+                padding: 20px;
+            }
+
+            .pay-button {
+                width: 100%;
+                padding: 10px;
+                border-radius: 6px;
+                background: #28a745;
+                color: white;
+                border: none;
+                font-size: 16px;
+                transition: 0.3s;
+            }
+
+            .pay-button:hover {
+                background: #218838;
+            }
+
+            .package-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 16px;
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <section class="page-top-section set-bg" data-setbg="client/assets/img/page-top-bg/1.jpg"
+            style="background-image: url(&quot;client/assets/img/page-top-bg/1.jpg&quot;);">
+            <div class="page-info">
+                <h2>Nạp tiền</h2>
+                <div class="site-breadcrumb">
+                    <a href="/">Home</a> /
+                    <span>Nạp tiền</span>
+                </div>
+            </div>
+        </section>
+        <section class="blog-section spad">
+            <div class="container py-5">
+                <!-- Package Selection -->
+                <div class="card p-4 mb-4">
+                    <h5><i class="fas fa-box me-2"></i> Chọn gói nạp</h5>
+                    <div class="package-grid d-flex justify-content-evenly mt-3">
+                        <div class="package-card" data-package-id="4" data-package-name="Gói nhỏ">
+                            <div class="fw-bold mb-2">Gói nhỏ</div>
+                            <div class="text-primary mb-3">10.000 VND</div>
+                            <button class="add-button">
+                                <i class="fas fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                        <div class="package-card" data-package-id="1" data-package-name="Gói cơ bản">
+                            <div class="fw-bold mb-2">Gói cơ bản</div>
+                            <div class="text-primary mb-3">50.000 VND</div>
+                            <button class="add-button">
+                                <i class="fas fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                        <div class="package-card" data-package-id="2" data-package-name="Gói nâng cao">
+                            <div class="fw-bold mb-2">Gói nâng cao</div>
+                            <div class="text-primary mb-3">100.000 VND</div>
+                            <button class="add-button">
+                                <i class="fas fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                        <div class="package-card" data-package-id="3" data-package-name="Gói cao cấp">
+                            <div class="fw-bold mb-2">Gói cao cấp</div>
+                            <div class="text-primary mb-3">200.000 VND</div>
+                            <button class="add-button">
+                                <i class="fas fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                        <div class="package-card" data-package-id="5" data-package-name="Gói siêu cấp">
+                            <div class="fw-bold mb-2">Gói siêu cấp</div>
+                            <div class="text-primary mb-3">500.000 VND</div>
+                            <button class="add-button">
+                                <i class="fas fa-plus"></i> Thêm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Payment Details -->
+                <div class="card p-4">
+                    <h5><i class="fas fa-shopping-cart me-2"></i> Thông tin đơn hàng</h5>
+
+                    <!-- Selected Packages Container -->
+                    <div id="selected-packages" class="mb-4">
+                        <div class="empty-cart">
+                            <i class="fas fa-shopping-cart mb-2" style="font-size: 24px;"></i>
+                            <p class="mb-0">Chưa có gói nào được chọn</p>
+                        </div>
+                    </div>
+                    <form th:action="@{/deposit}" method="post">
+                        <input type="hidden" name="totalAmount" id="totalAmountInput" value="0">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <span class="h6 mb-0">Tổng tiền:</span>
+                            <span class="total-amount fw-bold text-primary">0 VND</span>
+                        </div>
+                        <button type="submit" class="pay-button">
+                            <i class="fas fa-lock me-2"></i> Thanh toán ngay
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+    <th:block layout:fragment="extra-js">
+        <script>
+            $(document).ready(function () {
+                let selectedPackages = new Map();
+
+                function updateCart() {
+                    const $selectedPackages = $('#selected-packages');
+                    $selectedPackages.empty();
+
+                    if (selectedPackages.size === 0) {
+                        $selectedPackages.html(`
+                            <div class="empty-cart">
+                                <i class="fas fa-shopping-cart mb-2" style="font-size: 24px;"></i>
+                                <p class="mb-0">Chưa có gói nào được chọn</p>
+                            </div>
+                        `);
+                        $('.total-amount').text('0 VND');
+                        $('.pay-button').prop('disabled', true);
+                        $('#totalAmountInput').val(0);
+                        return;
+                    }
+
+                    let totalAmount = 0;
+                    selectedPackages.forEach((package, id) => {
+                        $selectedPackages.append(`
+                            <div class="selected-package" data-id="${id}">
+                                <div>
+                                    <div class="fw-bold">${package.name}</div>
+                                    <div class="text-primary">${package.price}</div>
+                                </div>
+                                <button class="remove-button" data-id="${id}">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        `);
+                        totalAmount += parseInt(package.price.replace(/\D/g, ''));
+                    });
+
+                    $('.total-amount').text(totalAmount.toLocaleString() + ' VND');
+                    $('.pay-button').prop('disabled', false);
+                    $('#totalAmountInput').val(totalAmount);
+                }
+
+                $('.add-button').click(function () {
+                    const $card = $(this).closest('.package-card');
+                    const id = $card.data('package-id');
+                    const name = $card.data('package-name');
+                    const price = $card.find('.text-primary').text();
+
+                    if (!selectedPackages.has(id)) {
+                        selectedPackages.set(id, { name, price });
+                        updateCart();
+                    }
+                });
+
+                $(document).on('click', '.remove-button', function () {
+                    const id = $(this).data('id');
+                    selectedPackages.delete(id);
+                    updateCart();
+                });
+
+                $('.pay-button').click(function () {
+                    const totalAmount = $('.total-amount').text().replace(/\D/g, '');
+                    $('#totalAmountInput').val(totalAmount);
+                });
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>

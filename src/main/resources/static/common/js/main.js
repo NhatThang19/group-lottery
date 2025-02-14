@@ -41,7 +41,7 @@ function formatAllDateTime() {
 }
 
 function formatAllCurrency() {
-    $("td[data-balance]").each(function () {
+    $("[data-balance]").each(function () {
         let rawBalance = $(this).attr("data-balance");
         if (rawBalance) {
             $(this).text(formatCurrency(parseFloat(rawBalance)));

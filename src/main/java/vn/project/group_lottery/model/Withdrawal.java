@@ -25,7 +25,7 @@ public class Withdrawal {
     @Enumerated(EnumType.STRING)
     private BankName bankName;
 
-    private int accountNumberHolder;
+    private long accountNumberHolder;
 
     private String bankNameHolder;
 }
