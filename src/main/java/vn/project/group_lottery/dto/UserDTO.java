@@ -43,18 +43,7 @@ public class UserDTO {
     private String address;
     private Long balance;
     private TransactionDto transaction;
-    private List<TicketDto> tickets;
-
-    @Data
-    public static class TicketDto {
-        private Long ticketId;
-        private String ticketNumbers;
-        private LocalDateTime purchaseDate;
-        private Double price;
-        private LocalDateTime drawDate;
-        private String prizeStatus;
-        private String winningRank;
-    }
+    private List<TicketDTO> tickets;
 
     @Data
     public static class TransactionDto {
@@ -76,7 +65,7 @@ public class UserDTO {
         private String status;
         private Double amount;
         private LocalDateTime timestamp;
-        private TicketDto ticket;
+        private TicketDTO ticket;
     }
 
     @Data

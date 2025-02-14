@@ -41,13 +41,20 @@ function formatCurrency(amount) {
 }
 
 function showToast(message, heading, icon, loaderBg) {
-    Swal.fire({
-        title: heading,
+    $.toast({
         text: message,
-        icon: icon, // 'success', 'error', 'warning', 'info'
-        position: 'top-end',
-        showConfirmButton: false,
-        timer: 3000,
-        background: loaderBg,
+        heading: heading,
+        icon: icon,
+        showHideTransition: 'fade',
+        allowToastClose: true,
+        hideAfter: 3000,
+        stack: 5,
+        position: {
+            top: 70,
+            right: 10
+        },
+        textAlign: 'left',
+        loader: true,
+        loaderBg: loaderBg
     });
 }

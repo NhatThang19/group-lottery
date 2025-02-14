@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout/client/client-layout}">
+
+<head>
+    <title>Mua vé</title>
+
+    <th:block layout:fragment="extra-css">
+    </th:block>
+</head>
+
+<body>
+    <div layout:fragment="content">
+        <section class="page-top-section set-bg" data-setbg="client/assets/img/page-top-bg/1.jpg"
+            style="background-image: url(&quot;client/assets/img/page-top-bg/1.jpg&quot;);">
+            <div class="page-info">
+                <h2>Mua vé</h2>
+                <div class="site-breadcrumb">
+                    <a href="/">Home</a> /
+                    <span>Mua vé</span>
+                </div>
+            </div>
+        </section>
+        <section class="blog-section spad">
+            <div class="container">
+                <div class="lottery-container">
+                    <h2 class="text-center"> Chọn số Power 6/55</h2>
+                    <div id="numberContainer"></div>
+                    <div class="selected-numbers text-center" id="selectedNumbersDisplay"></div>
+                    <div class="button-group text-center">
+                        <form th:action="@{/bet}" th:object="${ticketDTO}" method="post">
+                            <!-- Trường ẩn để lưu số đã chọn -->
+                            <input type="hidden" th:field="*{ticketNumbers}" id="numbersTicket" name="numbersTicket">
+                            <button type="submit" id="submitBtn" class="btn btn-primary">
+                                <i class="fa fa-check"></i> Xác nhận chọn số
+                            </button>
+                            <button type="button" id="clearBtn" class="btn btn-danger text-white">
+                                <i class="fa fa-trash"></i> Xóa số đã chọn
+                            </button>
+                        </form>
+                    </div>
+                    <div id="message" th:if="${errorMessage != null or successMessage != null}" class="mt-3 text-center"
+                        th:text="${errorMessage != null ? errorMessage : successMessage}"
+                        th:classappend="${errorMessage != null ? 'alert alert-danger' : 'alert alert-success'}"
+                        role="alert">
+                    </div>
+                </div>
+        </section>
+    </div>
+    <th:block layout:fragment="extra-js">
+        <script>
+            $(document).ready(function () {
+                const selectedNumbers = [];
+
+                function updateSelectedNumbersDisplay() {
+                    let displayHtml = selectedNumbers.map(num => `<span class="selected-number">${num}</span>`).join('');
+                    $('#selectedNumbersDisplay').html(displayHtml);
+                }
+
+                // Generate number boxes
+                let numberHtml = '';
+                for (let i = 1; i <= 55; i++) {
+                    numberHtml += `<div class="number-box" data-number="${i}">${i}</div>`;
+                }
+                $('#numberContainer').html(numberHtml);
+
+                // Toggle selection
+                $('.number-box').on('click', function () {
+                    const number = $(this).data('number');
+                    if ($(this).hasClass('selected')) {
+                        selectedNumbers.splice(selectedNumbers.indexOf(number), 1);
+                        $(this).removeClass('selected');
+                    } else {
+                        if (selectedNumbers.length < 6) {
+                            selectedNumbers.push(number);
+                            $(this).addClass('selected');
+                        } else {
+                            showToast("Chỉ được chọn tối đa 6 số", 'Cảnh báo', 'warning', 'yellow');
+                        }
+                    }
+                    updateSelectedNumbersDisplay();
+                });
+
+                // Form submission
+                $('form').on('submit', function (e) {
+                    if (selectedNumbers.length !== 6) {
+                        e.preventDefault();
+                        showToast("'Thất bại", 'Vui lòng chọn đủ 6 số', 'error', '#c70000');
+                    } else {
+                        const selectedNumbersString = selectedNumbers.join(',');
+                        $('#selectedNumbersInput').val(selectedNumbersString);
+                        $('#numbersTicket').val(selectedNumbersString);
+                    }
+                });
+
+                // Clear button
+                $('#clearBtn').on('click', function (e) {
+                    selectedNumbers.length = 0;
+                    $('.number-box').removeClass('selected');
+                    $('#result').html('');
+                    updateSelectedNumbersDisplay();
+                });
+            });
+        </script>
+    </th:block>
+</body>
+
+</html>
