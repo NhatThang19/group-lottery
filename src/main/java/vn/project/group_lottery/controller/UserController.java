@@ -22,6 +22,8 @@ import vn.project.group_lottery.enums.Gender;
 import vn.project.group_lottery.enums.UserStatus;
 import vn.project.group_lottery.model.User;
 import vn.project.group_lottery.service.RoleService;
+import vn.project.group_lottery.service.TicketService;
+import vn.project.group_lottery.service.TransactionService;
 import vn.project.group_lottery.service.UploadImgService;
 import vn.project.group_lottery.service.UserService;
 
@@ -32,11 +34,16 @@ public class UserController {
     private final UserService userService;
     private final RoleService roleService;
     private final UploadImgService uploadImgService;
+    private final TransactionService transactionService;
+    private final TicketService ticketService;
 
-    public UserController(UserService userService, RoleService roleService, UploadImgService uploadImgService) {
+    public UserController(UserService userService, RoleService roleService, UploadImgService uploadImgService,
+            TransactionService transactionService, TicketService ticketService) {
         this.userService = userService;
         this.roleService = roleService;
         this.uploadImgService = uploadImgService;
+        this.transactionService = transactionService;
+        this.ticketService = ticketService;
     }
 
     private static final String PATH = "USER";
@@ -192,4 +199,39 @@ public class UserController {
 
         return "redirect:/admin/user/update/" + existingUser.getId();
     }
+
+    @GetMapping("/detail/{id}")
+    public String getUserDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("path", PATH);
+
+        User user = userService.getUserById(id).orElseThrow();
+
+        UserDTO userDTO = new UserDTO();
+
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setDateOfBirth(user.getDateOfBirth());
+        userDTO.setGender(user.getGender().toString());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setStatus(user.getStatus().toString());
+        userDTO.setLastLogin(user.getLastLogin());
+        userDTO.setRole(user.getRole().getName());
+        userDTO.setCreatedDate(user.getCreatedDate());
+        userDTO.setCreatedBy(user.getCreatedBy());
+        userDTO.setLastModifiedDate(user.getLastModifiedDate());
+        userDTO.setLastModifiedBy(user.getLastModifiedBy());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setBalance(user.getWallet().getBalance());
+
+        userDTO.setTicketsDTO(ticketService.getTicketsByUserId(id));
+
+        userDTO.setTransactionDTO(transactionService.getTransactionsByWalletId(user.getWallet().getId()));
+
+        model.addAttribute("user", userDTO);
+
+        return "admin/user/detail";
+    }
+
 }

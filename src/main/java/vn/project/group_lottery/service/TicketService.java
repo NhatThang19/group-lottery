@@ -1,15 +1,16 @@
 package vn.project.group_lottery.service;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
+import vn.project.group_lottery.dto.TicketRes;
 import vn.project.group_lottery.enums.TicketStatus;
 import vn.project.group_lottery.model.Draw;
 import vn.project.group_lottery.model.Ticket;
@@ -105,6 +106,23 @@ public class TicketService {
         ticketRepository.saveAll(tickets);
 
         return winningTickets;
+    }
+
+    public List<TicketRes> getTicketsByUserId(Long userId) {
+        List<Ticket> tickets = ticketRepository.findByUserId(userId);
+        return tickets.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private TicketRes convertToDTO(Ticket ticket) {
+        TicketRes dto = new TicketRes();
+        dto.setId(ticket.getId());
+        dto.setNumbersTicket(ticket.getNumbersTicket());
+        dto.setStatus(ticket.getStatus());
+        if (ticket.getDraw() != null) {
+            dto.setDrawDate(ticket.getDraw().getDrawDate());
+            dto.setWinningNumbers(ticket.getDraw().getWinningNumbers());
+        }
+        return dto;
     }
 
 }

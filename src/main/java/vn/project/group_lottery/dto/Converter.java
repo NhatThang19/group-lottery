@@ -1,9 +1,13 @@
 package vn.project.group_lottery.dto;
 
+import java.util.List;
+
 import vn.project.group_lottery.dto.Request.RegisterInfoReq;
 import vn.project.group_lottery.dto.Request.RegisterReq;
 import vn.project.group_lottery.enums.Gender;
+import vn.project.group_lottery.model.Ticket;
 import vn.project.group_lottery.model.User;
+import vn.project.group_lottery.repository.TicketRepository;
 
 public class Converter {
 
@@ -30,6 +34,23 @@ public class Converter {
     }
 
     public static UserDTO userConvertToUserDTODetail(User user, UserDTO userDTO) {
+        userDTO.setId(user.getId());
+        userDTO.setUsername(user.getUsername());
+        userDTO.setEmail(user.getEmail());
+        userDTO.setPhone(user.getPhone());
+        userDTO.setDateOfBirth(user.getDateOfBirth());
+        userDTO.setGender(user.getGender().toString());
+        userDTO.setAvatar(user.getAvatar());
+        userDTO.setStatus(user.getStatus().toString());
+        userDTO.setLastLogin(user.getLastLogin());
+        userDTO.setRole(user.getRole().getName());
+        userDTO.setCreatedDate(user.getCreatedDate());
+        userDTO.setCreatedBy(user.getCreatedBy());
+        userDTO.setLastModifiedDate(user.getLastModifiedDate());
+        userDTO.setLastModifiedBy(user.getLastModifiedBy());
+        userDTO.setAddress(user.getAddress());
+        userDTO.setBalance(user.getWallet().getBalance());
+
         return userDTO;
     }
 

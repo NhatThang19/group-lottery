@@ -42,56 +42,7 @@ public class UserDTO {
     @NotBlank(message = "Địa chỉ không được để trống")
     private String address;
     private Long balance;
-    private TransactionDto transaction;
-    private List<TicketDTO> tickets;
+    private List<TransactionDTO> transactionDTO;
+    private List<TicketRes> ticketsDTO;
 
-    @Data
-    public static class TransactionDto {
-        private Double totalDeposit;
-        private Double totalWithdrawal;
-        private Double totalBet;
-        private Double totalPrize;
-        private Integer transactionCount;
-        private List<BetTransactionDto> betTransactions;
-        private List<DepositTransactionDto> depositTransactions;
-        private List<WithdrawalTransactionDto> withdrawalTransactions;
-        private List<PrizeTransactionDto> prizeTransaction;
-    }
-
-    @Data
-    public static class BetTransactionDto {
-        private Long transactionId;
-        private LocalDateTime CreatedDate;
-        private String status;
-        private Double amount;
-        private LocalDateTime timestamp;
-        private TicketDTO ticket;
-    }
-
-    @Data
-    public static class DepositTransactionDto {
-        private Long transactionId;
-        private LocalDateTime CreatedDate;
-        private String status;
-        private Double amount;
-    }
-
-    @Data
-    public static class WithdrawalTransactionDto {
-        private Long transactionId;
-        private LocalDateTime CreatedDate;
-        private String status;
-        private Double amount;
-        private String bankName;
-        private int accountNumberHolder;
-        private String bankNameHolder;
-    }
-
-    @Data
-    public static class PrizeTransactionDto {
-        private Long transactionId;
-        private LocalDateTime CreatedDate;
-        private Double amount;
-        private String status;
-    }
 }

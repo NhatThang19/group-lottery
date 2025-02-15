@@ -9,5 +9,5 @@ import vn.project.group_lottery.model.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long> {
-
+    List<Transaction> findByWalletId(Long walletId);
 }

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import vn.project.group_lottery.dto.TicketDTO;
+import vn.project.group_lottery.dto.TransactionDTO;
 import vn.project.group_lottery.dto.WithdrawalDTO;
 import vn.project.group_lottery.enums.BankName;
 import vn.project.group_lottery.enums.TicketStatus;
@@ -202,13 +203,37 @@ public class TransactionService {
             Wallet wallet = user.getWallet();
             wallet.setBalance(wallet.getBalance() + prizePerParticipant);
             walletsToUpdate.add(wallet);
+
+            Transaction transaction = new Transaction();
+            transaction.setAmount(prizePerParticipant);
+            transaction.setTransactionType(TransactionType.PRIZE);
+            transaction.setWallet(wallet);
+            transaction.setStatus(TransactionStatus.SUCCESS);
+            transaction.setCreatedDate(LocalDateTime.now());
+            transactionsToSave.add(transaction);
+
         }
 
-        // Lưu thay đổi vào cơ sở dữ liệu
         walletService.saveAllWallet(walletsToUpdate);
         transactionRepository.saveAll(transactionsToSave);
 
         return totalPrizeAmount;
+    }
+
+    public List<TransactionDTO> getTransactionsByWalletId(Long walletId) {
+        List<Transaction> transactions = transactionRepository.findByWalletId(walletId);
+        return transactions.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+
+    private TransactionDTO convertToDTO(Transaction transaction) {
+        TransactionDTO dto = new TransactionDTO();
+        dto.setId(transaction.getId());
+        dto.setAmount(transaction.getAmount());
+        dto.setTransactionType(transaction.getTransactionType().toString());
+        dto.setCreatedDate(transaction.getCreatedDate());
+        dto.setStatus(transaction.getStatus().toString());
+
+        return dto;
     }
 
 }

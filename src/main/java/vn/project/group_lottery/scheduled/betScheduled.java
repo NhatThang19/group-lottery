@@ -14,7 +14,7 @@ public class betScheduled {
     }
 
     // @Scheduled(cron = "0 0 18 * * SAT")
-    // @Scheduled(fixedRate = 120000)
+    @Scheduled(fixedRate = 6000)
     public void schedulePower655Draw() {
         drawService.runPower655Draw();
     }
